@@ -4,6 +4,10 @@ import axios from 'axios';
 
 function App() {
   const [events, setEvents] = useState([]);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [date, setDate] = useState(undefined);
 
   useEffect(() => {
     if(!events.length) {
@@ -13,6 +17,19 @@ function App() {
     }
   })
 
+  const handleClickAdd = () => {
+    axios.post('http://localhost:3000/event', {
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    eventDate: date
+    }).then(response => {
+      console.log(response);
+    }).catch(()=>{
+      console.log('error')
+    })
+  }
+
   const tableRow = events.map((event,index) => {
     return (
       <tr key={index}>
@@ -21,7 +38,7 @@ function App() {
         <td>{event.lastName}</td>
         <td>{event.email}</td>
         <td>{event.eventDate}</td>
-        <td><Button color="success" size="sm">delete</Button></td>
+        <td><Button color="danger" size="sm">delete</Button></td>
       </tr>
     )
   })
@@ -32,20 +49,22 @@ function App() {
       <div className="event-form">
         <FormGroup>
           <Label for="firstName">First name</Label>
-          <Input type="text" id="firstName"></Input>
+          <Input type="text" id="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)}></Input>
         </FormGroup>
         <FormGroup>
           <Label for="lastName">Last name</Label>
-          <Input type="text" id="lastName"></Input>
+          <Input type="text" id="lastName" value={lastName} onChange={(e)=>setLastName(e.target.value)}></Input>
         </FormGroup>
         <FormGroup>
           <Label for="email">Email</Label>
-          <Input type="email" id="email"></Input>
+          <Input type="email" id="email" value={email} onChange={(e)=>setEmail(e.target.value)}></Input>
         </FormGroup>
         <FormGroup>
           <Label for="date">Event date</Label>
-          <Input type="date" id="date"></Input>
+          <Input type="date" id="date" value={date} onChange={(e)=>setDate(e.target.value)}></Input>
         </FormGroup>
+
+        <Button color="success" onClick={handleClickAdd}>Add event</Button>
       </div>
 
       <div className="event-list">
