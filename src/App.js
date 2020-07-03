@@ -2,6 +2,8 @@ import React,{useEffect, useState } from 'react';
 import { Table, Button, FormGroup, Label, Input } from 'reactstrap';
 import axios from 'axios';
 
+import './app.css';
+
 function App() {
   const [events, setEvents] = useState([]);
   const [firstName, setFirstName] = useState('');
@@ -30,15 +32,24 @@ function App() {
     })
   }
 
-  const tableRow = events.map((event,index) => {
+  const handleClickDelete = (id) => {
+    const url = 'http://localhost:3000/event/' + id; 
+    axios.delete(url).then(response => {
+      console.log(response)
+    }).catch(()=>{
+      console.log('error');
+    });
+  }
+
+  const tableRow = events.map(event => {
     return (
-      <tr key={index}>
-        <td>{event.id}</td>
+      <tr key={event._id}>
+        <td>{event._id}</td>
         <td>{event.firstName}</td>
         <td>{event.lastName}</td>
         <td>{event.email}</td>
         <td>{event.eventDate}</td>
-        <td><Button color="danger" size="sm">delete</Button></td>
+        <td><Button color="danger" size="sm" onClick={()=>handleClickDelete(event._id)}>delete</Button></td>
       </tr>
     )
   })
