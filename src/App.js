@@ -79,6 +79,7 @@ function App() {
       </div>
 
       <div className="event-list">
+        <h2>My list of events</h2>
         <Table>
           <thead>
             <tr>
