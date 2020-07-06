@@ -1,0 +1,8 @@
+.event-form {
+    margin-bottom: 20px;
+}
+
+.event-form__error {
+    margin-top: 10px;
+    color: red;
+}
