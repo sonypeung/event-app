@@ -1,18 +1,23 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Button, Table } from 'reactstrap';
-import axios from 'axios';
+import {useSelector, useDispatch} from 'react-redux';
+import {deleteEvent, getEvents} from '../../actions';
 
-export default function EventList({events, getEvents}) {
+export default function EventList() {
+
+    const eventsReducer = useSelector(state => state.eventsReducer)
+    const dispatch = useDispatch();
+    useEffect(() => {
+        if (!eventsReducer.isLoaded) {
+            dispatch(getEvents());
+        }
+    })
+
     const handleClickDelete = (id) => {
-        const url = 'http://localhost:3000/event/' + id;
-        axios.delete(url).then(() => {
-            getEvents();
-        }).catch(() => {
-            console.log('error');
-        });
+        dispatch(deleteEvent(id));
     }
 
-    const tableRow = events.map(event => {
+    const tableRow = eventsReducer.events.map(event => {
         return (
             <tr key={event._id}>
                 <td>{event._id}</td>

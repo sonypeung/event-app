@@ -1,32 +1,30 @@
 import React, { useState } from 'react';
 import { Button, FormGroup, Label, Input } from 'reactstrap';
-import axios from 'axios';
+import {useSelector, useDispatch} from 'react-redux';
+import {addEvent, addEventFailure} from '../../actions';
 
 import './Event.Form.Component.css';
 
-export default function EventForm({getEvents}) {
-    const [error, setError] = useState('');
+export default function EventForm() {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [date, setDate] = useState('');
 
+    const eventsReducer = useSelector(state => state.eventsReducer)
+    const dispatchEvent = useDispatch();
+
     const handleClickAdd = () => {
         if (isDefined(firstName) && isDefined(lastName) && isDefined(email) && isDefined(date)) {
-            axios.post('http://localhost:3000/event', {
+            dispatchEvent(addEvent({
                 firstName: firstName,
                 lastName: lastName,
                 email: email,
                 eventDate: date
-            }).then(() => {
-                getEvents();
-                clear();
-            }).catch((e) => {
-                setError(e.message);
-            }
-            )
+            }))
+            clear();
         } else {
-            setError('All fields are required.')
+            dispatchEvent(addEventFailure('All fields are required.'));
         }
     }
 
@@ -35,7 +33,6 @@ export default function EventForm({getEvents}) {
     }
 
     const clear = () => {
-        setError('');
         setFirstName('');
         setLastName('');
         setDate('');
@@ -62,7 +59,7 @@ export default function EventForm({getEvents}) {
             </FormGroup>
 
             <Button color="success" onClick={handleClickAdd}>Add event</Button>
-            <div className="event-form__error">{error}</div>
+            <div className="event-form__error">{eventsReducer.error}</div>
         </div>
     );
 }
