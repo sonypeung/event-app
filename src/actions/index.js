@@ -22,8 +22,8 @@ export const addEventFailure = error => {
 }
 
 export const getEvents = () => {
-    return  (dispatch) => {
-        axios.get('http://localhost:3000/event')
+    return (dispatch) => {
+        return axios.get('http://localhost:3000/event')
         .then((response) => {
             const events = response.data;
             dispatch(fetchEventsSuccess(events));
@@ -37,7 +37,7 @@ export const getEvents = () => {
 
 export const deleteEvent = (id) => {
     return  (dispatch) => {
-        axios.delete('http://localhost:3000/event/' + id)
+        return axios.delete('http://localhost:3000/event/' + id)
         .then(() => {
             dispatch(getEvents());
         })
@@ -50,7 +50,7 @@ export const deleteEvent = (id) => {
 
 export const addEvent = (event) => {
     return  (dispatch) => {
-        axios.post('http://localhost:3000/event', event)
+        return axios.post('http://localhost:3000/event', event)
         .then(() => {
             dispatch(getEvents());
         })
