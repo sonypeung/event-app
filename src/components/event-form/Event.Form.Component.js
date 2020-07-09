@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, FormGroup, Label, Input } from 'reactstrap';
 import {useSelector, useDispatch} from 'react-redux';
 import {addEvent, addEventFailure} from '../../actions';
+import {isDefined, isValidEmail} from './Event.Form.Validation'
 
 import './Event.Form.Component.css';
 
@@ -16,20 +17,20 @@ export default function EventForm() {
 
     const handleClickAdd = () => {
         if (isDefined(firstName) && isDefined(lastName) && isDefined(email) && isDefined(date)) {
-            dispatchEvent(addEvent({
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                eventDate: date
-            }))
-            clear();
+            if (isValidEmail(email)) {
+                dispatchEvent(addEvent({
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    eventDate: date
+                }))
+                clear();
+            } else {
+                dispatchEvent(addEventFailure('Please provide a correct email.'));
+            }
         } else {
             dispatchEvent(addEventFailure('All fields are required.'));
         }
-    }
-
-    const isDefined = (text) => {
-        return text !== "" && text?.length > 0;
     }
 
     const clear = () => {

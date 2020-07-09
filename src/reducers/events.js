@@ -17,7 +17,7 @@ const eventsReducer = (state = initialState, action) => {
                 events : [],
                 error: action.payload,
                 isLoaded: true
-            };
+            }
         case 'ADD_EVENT_FAILURE':
             return {
                 events: state.events,
